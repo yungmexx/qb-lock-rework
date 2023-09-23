@@ -6,6 +6,10 @@ https://streamable.com/fxjwpf
 ![image](https://github.com/yungmexx/qb-lock-rework/assets/113365369/5c3c5b32-fd97-4645-b65d-6d3444dd9a63)
 
 
+
+
+
+
 cfx post: https://forum.cfx.re/t/qb-lock-reseign/5171106
 
 Template
