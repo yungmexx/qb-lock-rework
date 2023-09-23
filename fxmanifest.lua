@@ -17,8 +17,6 @@ files {
     'html/index.html',
     'html/*.css',
     'html/*.js',
-    'html/spacebar.png',
-
 }
 
 
