@@ -1,7 +1,11 @@
 qb-lock
 https://streamable.com/fxjwpf
 
-image image image
+![image](https://github.com/yungmexx/qb-lock-rework/assets/113365369/d0c79171-b30a-4734-ad85-6dab88b26eab)
+![image](https://github.com/yungmexx/qb-lock-rework/assets/113365369/54f3a652-5e33-4484-b0e3-33a02fb609b7)
+![image](https://github.com/yungmexx/qb-lock-rework/assets/113365369/2e466f86-d618-4c29-a628-3b5b881022d4)
+![image](https://github.com/yungmexx/qb-lock-rework/assets/113365369/5c3c5b32-fd97-4645-b65d-6d3444dd9a63)
+
 
 cfx post: https://forum.cfx.re/t/qb-lock-reseign/5171106
 
