@@ -9,10 +9,6 @@ https://streamable.com/fxjwpf
 
 
 
-
-cfx post: https://forum.cfx.re/t/qb-lock-reseign/5171106
-
-
 # Template
 ```lua
 
