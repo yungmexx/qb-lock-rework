@@ -1,5 +1,4 @@
 qb-lock
-https://streamable.com/fxjwpf
 
 ![image](https://github.com/yungmexx/qb-lock-rework/assets/113365369/54f3a652-5e33-4484-b0e3-33a02fb609b7)
 ![image](https://github.com/yungmexx/qb-lock-rework/assets/113365369/2e466f86-d618-4c29-a628-3b5b881022d4)
