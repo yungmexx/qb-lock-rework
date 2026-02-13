@@ -19,6 +19,7 @@ files {
     'html/*.js',
 }
 
+ui_page 'html/index.html'
 
 exports {
     "StartLockPickCircle"
