@@ -15,119 +15,53 @@ body {
   user-select: none; -webkit-user-drag: none;
 }
 
-
-
 #canvas {
     position: absolute;
-    margin: 50px auto;
     top: 50%;
-    left:50%;
-    transform: translate(-50%,-50%);
+    left: 50%;
+    transform: translate(-50%, -50%);
     overflow: visible;
     height: 185px;
     width: 185px;
-    color:#822ff6
 }
 
-.spacebar-wrapper {
+.key-wrapper {
     position: absolute;
-    top: 55%;
+    top: 50%;
     left: 50%;
-    transform: translateY(-50%) translateX(-50%);
+    transform: translate(-50%, -50%);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.spacebar {
+.key {
     width: 8.0vh;
     height: 8.0vh;
     left: 56.0%;
-
 }
-
-
-
 
 .triangle {
-    position: fixed;
-    margin-top: -35px;
-    margin-left: -23px;
-    animation: bounce 0.4s ease infinite alternate;
-    border-left: 2.2vh solid transparent;
-    border-right: 2.2vh solid transparent;
-    border-top: 2.0vh solid rgb(0, 0, 0);
-}
-
-.inner-triangle {
-    border-left: 1.8vh solid transparent;
-    border-right: 1.8vh solid transparent;
-    border-top: 1.5vh solid rgba(255, 255, 255, 0.836); 
     position: absolute;
-    margin-top: -12px;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    animation: bounce 0.4s ease infinite alternate;
+
+    border-left: 1.5vh solid transparent;
+    border-right: 1.5vh solid transparent;
+    border-top: 1.9vh solid #cacaca;
+    z-index: 1;
 }
-
-
-
-
 
 @keyframes bounce {
-    0% {
-        transform: translateY(0);
-    }
-    100% {
-        transform: translateY(-15px);
-    }
+    0%   { transform: translate(-50%, -200%); }
+    100% { transform: translate(-50%, -235%); }
 }
-
-
-
-.lock {
-    position: absolute;
-    top: 51.8%;
-    left: 49.0%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.349);
-    font-size: 48px;
-    color: #ffffff;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-    transition: font-size 0.8s;
-    animation: wiggle 0.4s ease infinite alternate;
-}
-
-
-
-.unlock {
-    position: absolute;
-    top: 51.9%;
-    left: 48.5%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.349);
-    font-size: 48px;
-    color: #ffffff;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-    transition: font-size 0.8s;
-    animation: wiggle 0.4s ease infinite alternate;
-}
-
-
-@keyframes wiggle {
-    0% { transform: rotate(0deg); }
-   80% { transform: rotate(0deg); }
-   85% { transform: rotate(5deg); }
-   95% { transform: rotate(-5deg); }
-  100% { transform: rotate(0deg); }
-}
-
-
-
 
 .e-text {
     position: absolute;
+    top: 49%;
+    left: 50%;
+    transform: translate(-50%, -49%);
     color: #000000;
     background-color: #ffffff;
     width: 50px;
@@ -138,12 +72,37 @@ body {
     font-family: 'Akrobat Black';
     letter-spacing: 0.06rem;
     font-size: 2.2rem;
-    text-transform: uppercase;
-    user-select: none;
-    white-space: nowrap;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     border-radius: 8px;
-    top: -30%;
+}
+
+.lock {
+    position: absolute;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.349);
+    font-size: 48px;
+    color: #ffffff;
+    animation: wiggle 0.4s ease infinite alternate;
+}
+
+.unlock {
+    position: absolute;
+    top: 50%;
+    left: 49.8%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.349);
+    font-size: 48px;
+    color: #ffffff;
+    animation: wiggle 0.4s ease infinite alternate;
+}
+
+@keyframes wiggle {
+    0%   { transform: translate(-50%, -50%) rotate(0deg); }
+    80%  { transform: translate(-50%, -50%) rotate(0deg); }
+    85%  { transform: translate(-50%, -50%) rotate(5deg); }
+    95%  { transform: translate(-50%, -50%) rotate(-5deg); }
+    100% { transform: translate(-50%, -50%) rotate(0deg); }
 }
