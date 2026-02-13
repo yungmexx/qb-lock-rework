@@ -1,13 +1,12 @@
-local QBCore = exports['qb-core']:GetCoreObject()
 local Result = nil
 local NUI_status = false
 
 local UseInteractSound = false
 local debug = true
 
-RegisterNetEvent('kwk-lockpick:client:openLockpick', function(callback, circles)
+RegisterNetEvent('qb-lockpick:client:openLockpick', function(callback, circles)
     lockpickCallback = callback
-    exports['qb-lock']:StartLockPickCircle(total,circles) 
+    exports['qb-lock']:StartLockPickCircle(circles, 10, callback) 
 end)
 
 function StartLockPickCircle(circles, seconds, callback)
@@ -62,18 +61,16 @@ RegisterNUICallback('success', function()
     return Result
 end)
 
-
-
 if debug then
     RegisterCommand("lpgame", function()
-	    local time = math.random(7,10)
-	    local circles =  math.random(2,4)
-	    local success = exports['qb-lock']:StartLockPickCircle(circles, time, success)
-	    print(success)
-	    if success then
-		    print("WIN")
-	    else
-		    print("FAIL")
-	    end
+        local time = math.random(7,10)
+        local circles = math.random(2,4)
+        local success = exports['qb-lock']:StartLockPickCircle(circles, time, success)
+        print(success)
+        if success then
+            print("WIN")
+        else
+            print("FAIL")
+        end
     end)
 end
