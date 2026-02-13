@@ -1,216 +1,190 @@
-let canvas = document.getElementById("canvas");
-let ctx = canvas.getContext("2d");
-let W = canvas.width;
-let H = canvas.height;
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const W = canvas.width;
+const H = canvas.height;
+
 let degrees = 0;
-let new_degrees = 0;
+let new_degrees = 360;
 let time = 0;
-let color = "#ff0000";
-let txtcolor = "#ffffff";
-let bgcolor = "rgba(10, 10, 10, 0.8)";
-let bgcolor2 = "rgba(255, 255, 255, 0.8)";
-let bgcolor3 = "#00ff00";
 
-let key_to_press;
-let g_start, g_end;
-let animation_loop;
-let animationId;
+const color = "#ff0000";
+const bgcolor = "rgba(10, 10, 10, 0.8)";
+const originalBgColor2 = "rgba(255, 255, 255, 0.8)";
+const successColor = "#00ff00";
 
-let gameEndTimeout; // Declare the global variable
+let bgcolor2 = originalBgColor2;
 
+let g_start = 0;
+let g_end = 0;
 
-let originalBgColor2 = bgcolor2; // Store the original bgcolor2 value
+let animation_loop = null;
+let gameEndTimeout = null;
 
 let needed = 4;
 let streak = 0;
 
+const DEG_TO_RAD = Math.PI / 180;
+const CENTER_X = W / 2;
+const CENTER_Y = H / 2;
+
 
 function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function init() {
 
-    // Clear the canvas every time a chart is drawn
+function drawFrame() {
     ctx.clearRect(0, 0, W, H);
 
-    // Draw the filled background circle
-    const backgroundRadius = 125; // Adjust the radius as needed
+
     ctx.beginPath();
-    ctx.fillStyle = "rgba(0, 0, 0, 0.3)"; // Replace with your desired background color
-    ctx.arc(W / 2, H / 2, backgroundRadius, 0, Math.PI * 2, false);
+    ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
+    ctx.arc(CENTER_X, CENTER_Y, 125, 0, Math.PI * 2);
     ctx.fill();
 
-    // Draw the stroke (outline) of the circle
+
     ctx.beginPath();
     ctx.strokeStyle = bgcolor;
     ctx.lineWidth = 15;
-    ctx.arc(W / 2, H / 2, 100, 0, Math.PI * 2, false);
+    ctx.arc(CENTER_X, CENTER_Y, 100, 0, Math.PI * 2);
     ctx.stroke();
 
-    // Green zone
+
     ctx.beginPath();
-    ctx.strokeStyle = correct === true? bgcolor3 : bgcolor2;
+    ctx.strokeStyle = bgcolor2;
     ctx.lineWidth = 25;
-    ctx.arc(W / 2, H / 2, 98, g_start - 90 * Math.PI / 180, g_end - 90 * Math.PI / 180, false);
+    ctx.arc(
+        CENTER_X,
+        CENTER_Y,
+        98,
+        g_start - 90 * DEG_TO_RAD,
+        g_end - 90 * DEG_TO_RAD
+    );
     ctx.stroke();
 
-    // Angle in radians = angle in degrees * PI / 180
-    let radians = degrees * Math.PI / 180;
+
+    const radians = degrees * DEG_TO_RAD;
+
     ctx.beginPath();
     ctx.strokeStyle = color;
     ctx.lineWidth = 40;
-    ctx.arc(W / 2, H / 2, 90, radians - 0.08 - 90 * Math.PI / 180, radians - 90 * Math.PI / 180, false);
+    ctx.arc(
+        CENTER_X,
+        CENTER_Y,
+        90,
+        radians - 0.08 - 90 * DEG_TO_RAD,
+        radians - 90 * DEG_TO_RAD
+    );
     ctx.stroke();
 }
 
 
-function draw(time) {
-    if (typeof animation_loop !== undefined) clearInterval(animation_loop);
-    g_start = getRandomInt(20, 40) / 10;
-    g_end = getRandomInt(5, 10) / 10;
-    g_end = g_start + g_end;
+
+function startRotation(intervalTime) {
+    if (animation_loop) clearInterval(animation_loop);
+
     degrees = 0;
-    new_degrees = 360;
 
+    g_start = getRandomInt(20, 40) / 10;
+    g_end = g_start + getRandomInt(5, 10) / 10;
 
-    key_to_press = 'E';
+    animation_loop = setInterval(() => {
+        if (degrees >= new_degrees) {
+            failGame();
+            return;
+        }
 
-    time = time; // Increase the time to slow down the animation
-    animation_loop = setInterval(animate_to, time);
+        degrees += 2;
+        drawFrame();
+
+    }, intervalTime);
 }
 
-
-function animate_to() {
-    if (degrees >= new_degrees) {
-        wrong();
-        return;
-    }
-    degrees+=2;
-    init();
-}
-
-function correct() {
-    streak += 1;
-    clearInterval(animation_loop); // Stop the animation immediately
-
-    if (streak == needed) {
-    // Change bgcolor2 to green
-        bgcolor2 = "rgba(0, 255, 0, 0.8)";
-        init();
-
-        endGame(true);
-
-        $('.spacebar-wrapper').hide();
-        $('.e-text').hide();
-
-        $('.unlock').css('opacity', '100%');
-        $('.unlock').show();
-
-
-    } else {
-        draw(time);
-    }
-}
-
-function wrong() {
-    // Change bgcolor2 to red
-    bgcolor2 = "rgba(255, 0, 0, 0.8)";
-    init();
-
+function successRound() {
+    streak++;
     clearInterval(animation_loop);
 
-    $('.e-text').hide();
-    $('.spacebar-wrapper').hide();
-    // Show the lock icon using jQuery
-    $('.lock').css('opacity', '100%');
-    $('.lock').show();
+    if (streak === needed) {
+        bgcolor2 = "rgba(0, 255, 0, 0.8)";
+        drawFrame();
+
+        $('.key-wrapper, .e-text').hide();
+        $('.unlock').css('opacity', '100%').show();
+
+        endGame(true);
+    } else {
+        startRotation(time);
+    }
+}
+
+function failGame() {
+    clearInterval(animation_loop);
+
+    bgcolor2 = "rgba(255, 0, 0, 0.8)";
+    drawFrame();
+
+    $('.key-wrapper, .e-text').hide();
+    $('.lock').css('opacity', '100%').show();
 
     endGame(false);
 }
 
 
-document.addEventListener("keydown", function(ev) {
-    if (ev.key === 'E' || ev.code === 'KeyE') {
-        let d_start = (180 / Math.PI) * g_start;
-        let d_end = (180 / Math.PI) * g_end;
-        if (degrees < d_start) {
-            wrong();
-        } else if (degrees > d_end) {
-            wrong();
-        } else {
-            correct();
-        }
+document.addEventListener("keydown", (ev) => {
+    if (ev.key !== 'E' && ev.code !== 'KeyE') return;
+
+    const d_start = g_start / DEG_TO_RAD;
+    const d_end = g_end / DEG_TO_RAD;
+
+    if (degrees < d_start || degrees > d_end) {
+        failGame();
+    } else {
+        successRound();
     }
 });
 
 
+function startGame(intervalTime) {
+    clearTimeout(gameEndTimeout);
+    clearInterval(animation_loop);
 
-function startGame(time){
-    clearTimeout(gameEndTimeout); // Clear the previous timeout
-
-    $('.lock').hide(); // Hide the lock element
-    $('.unlock').hide(); // Hide the unlock element
-    $('.spacebar-wrapper').hide(); // Hide the spacebar-wrapper element
-    $('.e-text').hide();
-
-    $('#canvas').show();
-    
-    // Reset bgcolor2 to its original color
+    streak = 0;
     bgcolor2 = originalBgColor2;
-    
-    draw(time);
+
+    $('.lock, .unlock, .key-wrapper, .e-text').hide();
+    $('#canvas').css('display', 'block');
+
+
+    startRotation(intervalTime);
 }
 
 function endGame(status) {
-    var xhr = new XMLHttpRequest();
-    let u = "fail";
-    if (status)
-        u = "success";
-
-    xhr.open("POST", `http://qb-lock/${u}`, true);
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `https://${GetParentResourceName()}/${status ? "success" : "fail"}`, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify({}));
+
     streak = 0;
     needed = 4;
 
-    // Set a timeout and assign it to the global variable
-    gameEndTimeout = setTimeout(function () {
-        $('.spacebar-wrapper').hide();
-        $('.lock').hide();
-        $('.unlock').hide();
+    gameEndTimeout = setTimeout(() => {
+        $('.key-wrapper, .lock, .unlock, .e-text').hide();
         $('#canvas').hide();
 
-        $('.e-text').hide();
-
-        // Reset bgcolor2 and redraw the background with the original bgcolor2
         bgcolor2 = originalBgColor2;
-        init();
+        drawFrame();
+
     }, 1100);
 }
 
-  
-  window.addEventListener("message", (event) => {
-    if(event.data.action == "start"){
-        if(event.data.value != null ){
-            needed = event.data.value
-        }else{
-            needed = 4
-        }
-        if(event.data.time != null ){
-            time = event.data.time
-        }else{
-            time = 2
-        }
-		console.log(event.data.time)
+window.addEventListener("message", (event) => {
+    if (event.data.action !== "start") return;
 
-        startGame(time)
-        $('#canvas').show();
-        $('.spacebar-wrapper').css('opacity', '100%');
-        $('.spacebar-wrapper').show();
-        $('.e-text').show();
-    }
-  })
+    needed = event.data.value ?? 4;
+    time = event.data.time ?? 2;
 
+    startGame(time);
+
+    $('.key-wrapper').css('opacity', '100%').show();
+    $('.e-text').show();
+});
